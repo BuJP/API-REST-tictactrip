@@ -13,7 +13,7 @@ module.exports = function(req, res, next) {
         if(err){
             return res.status(401).json({ msg: "Token invalide" }); //non valide
         }
-        req.email = email
+        req.user = email
         next();
     });
     
