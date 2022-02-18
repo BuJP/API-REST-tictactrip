@@ -10,13 +10,18 @@ const router = require("express").Router();
 
 router.post("/justify", [validateJwt,textJustifyValidation], async(req,res) =>{
     try {
+        // 1. recuperer le texte a justifier
         const text = req.body;
+
+        // 2. justifier le texte
         const justifiedText = justify.justify(text,  process.env.MAX_CHARACTER);
 
+        // 3. inserer le texte justifier dans la bdd
         const newText = await pool.query(
             "INSERT INTO justified_text(user_id, text, created_at, length) VALUES ( $1, $2, now(), $3);", [req.user.email, justifiedText,req.textLength]
         );
-
+        
+        // 4. retourner le texte justifier
         res.send(justifiedText);
         
        
