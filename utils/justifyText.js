@@ -15,8 +15,16 @@ function formatLigne(mots, nbCaracteres){
             mots.unshift(mot.trim());
             break;
         }
+        var motLength = mot.length
+        if( motLength > nbCaracteres){
+            const diff = motLength - nbCaracteres;
+            mots.unshift(mot.substr(motLength-diff));
+            mot = mot.substr(0, 79);
+        }
         ligne.push(mot);
-        if(ligne.join(' ').length > nbCaracteres){
+        var ligneLength = ligne.join(' ').length;
+        
+        if( ligneLength > nbCaracteres){
             mots.unshift(ligne.pop());
             verifLigneLength(ligne, nbCaracteres);
             break;
@@ -39,11 +47,11 @@ function verifLigneLength(ligne, nbCaracteres){
           
         } 
         
-        ligne.splice(i, 0, ' ');
+        ligne.splice(i, 0, '\xa0');
 
         i+=2+spaceCount;
         
-      }
+    }
 
 
 }

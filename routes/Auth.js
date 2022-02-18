@@ -43,7 +43,7 @@ router.post("/connexion",validateCredential, async(req,res) => {
         //2. verifier que l'utilisateur existe
         const user = await pool.query('SELECT * FROM users WHERE email = ($1)',[email]);
         if(user.rows.length === 0 ){
-            return res.status(401).send("Identifient non valide"); //unauthorized
+            return res.status(401).send({ msg:"Identifient non valide"}); //unauthorized
         }
 
         //3. generer un token jwt
