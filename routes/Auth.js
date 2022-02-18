@@ -14,7 +14,7 @@ router.post("/instription",validateCredential, async(req, res) => {
         const user = await pool.query('SELECT * FROM users WHERE email = ($1)',[email]);
 
         if(user.rows.length !== 0 ){
-            return res.status(401).send("L'utilisateur existe déjà"); //unauthorized
+            return res.status(401).send({msg:"L'utilisateur existe déjà"}); //unauthorized
         }
 
         //3. ajouter l'utilisateur
