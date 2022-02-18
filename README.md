@@ -15,6 +15,4 @@ L'objectif de ce projet est d'implémenter et déployer une API REST qui justifi
 
 ### Modélisation de la base de donnée(PostgreSQL)
 
-![modelisation_de_la_bdd](https://user-images.githubusercontent.com/86422799/154757251-3795b7bc-33c4-4b4c-a611-ae22d8810bf0.JPG)
-
-
+![modelisation_de_la_bdd](https://user-images.githubusercontent.com/86422799/154759725-be2a1959-a899-4b98-b1dc-a7af8cb37bef.JPG)
