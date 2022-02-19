@@ -3,7 +3,8 @@ const pool = require("../models/dbConfig");
 const router = require("express").Router();
 const jwt = require('../utils/jwt');
 const validateCredential = require('../middleware/Validation');
-const validateJwt = require('../middleware/jwtValidation');
+const { Router } = require("express");
+
 
 router.post("/instription",validateCredential, async(req, res) => {
     try {
@@ -25,7 +26,7 @@ router.post("/instription",validateCredential, async(req, res) => {
         //4. generer un token jwt
         const token = jwt.generateToken(newUser.rows[0].email);
         
-        res.json({token})
+        res.status(201).send({token})
 
         
     } catch (error) {
@@ -49,7 +50,8 @@ router.post("/connexion",validateCredential, async(req,res) => {
         //3. generer un token jwt
         const token = jwt.generateToken(user.rows[0].email);
 
-        res.json({token})
+        
+        res.json({token});
     } catch (error) {
         console.log(error);
         res.status(500).send("Un problème est survenue sur le serveur");

@@ -13,4 +13,4 @@ text TEXT NOT NULL,
 created_at TIMESTAMP NOT NULL,
 length INTEGER NOT NULL);
 
-ALTER TABLE justified_text ADD CONSTRAINT justified_text_user FOREIGN KEY (user_id) REFERENCES users(email);
+ALTER TABLE justified_text ADD CONSTRAINT justified_text_user FOREIGN KEY (user_id) REFERENCES users(email) ON DELETE CASCADE;
