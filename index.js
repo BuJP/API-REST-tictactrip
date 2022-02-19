@@ -1,6 +1,7 @@
 const app = require('./app');
 
 
-app.listen(5500 , ()=>console.log('Server started : 5500'));
+const PORT = process.env.PORT || 5500
+app.listen(PORT , ()=>console.log('Server started : 5500'));
 
 

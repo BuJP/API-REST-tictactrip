@@ -2,7 +2,6 @@ const pool = require("../models/dbConfig");
 const validateJwt = require('../middleware/jwtValidation');
 const textJustifyValidation = require('../middleware/textJustifyValidation');
 const justify = require('../utils/justifyText');
-const { append } = require("express/lib/response");
 require('dotenv').config();
 const router = require("express").Router();
 
