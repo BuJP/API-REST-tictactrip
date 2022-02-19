@@ -9,7 +9,10 @@ require('dotenv').config();
 var token = null;
 
   
-
+beforeAll(async () => {
+    await pool.query('DELETE FROM justified_text WHERE user_id = $1 ', [JSON.parse(process.env.TEST_DEFAULT_USER).email]);
+    
+  })
 afterAll(done => {
     pool.end();
     done();
@@ -28,7 +31,10 @@ describe('POST /api/justify', () =>{
             .set('Content-type', 'text/plain')
             .send(process.env.TEST_TEXTE)
             .expect(200)
+
+        
     })
+    
 
     it('Retourne une erreur car il n y a pas de texte a justifier et un code HTTP 401', async () =>{
         
@@ -70,7 +76,7 @@ describe('POST /api/justify', () =>{
     
 
     it('Retourne une erreur car l utilisateur n a pas assez de credit journalier et un code HTTP 402', async () =>{
-        await setRateToMax();
+        await setRateToMax()
         await request(app).post('/api/justify')
             .set('Authorization', 'Bearer ' +  token.token  )
             .set('Content-type', 'text/plain')
@@ -78,6 +84,7 @@ describe('POST /api/justify', () =>{
             .expect(402)
             .expect('Content-Type', /json/)
             .then((res) =>{
+                console.log(res.body)
                 expect(res.body.msg).toEqual("Crédit journalier épuisé")
             });
     })
@@ -85,5 +92,5 @@ describe('POST /api/justify', () =>{
   })
 
 async function setRateToMax(){
-    await pool.query('UPDATE justified_text SET length= $1 WHERE user_id = $2', [ process.env.DAILY_RATE_LIMIT ,JSON.parse(process.env.TEST_DEFAULT_USER).email]);
+   return await pool.query('UPDATE justified_text SET length= $1 WHERE user_id = $2 RETURNING length' , [ process.env.DAILY_RATE_LIMIT ,JSON.parse(process.env.TEST_DEFAULT_USER).email]);
 }
