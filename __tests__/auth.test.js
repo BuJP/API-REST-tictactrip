@@ -15,6 +15,7 @@ const defaultUser = JSON.parse(process.env.TEST_DEFAULT_USER);
 
 beforeAll(async () => {
     await pool.query('DELETE FROM users WHERE email = $1 ', [defaultUser.email]);
+    
   })
   
   afterAll(done => {
