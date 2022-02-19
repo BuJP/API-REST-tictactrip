@@ -7,10 +7,11 @@ const fs = require('fs');
 
 
 
-const defaultUser = {email:"supertest@test.fr"};
+require('dotenv').config();
+
 const invalideMailUser = {email:"invalidetest"};
 const invalideUser = {email:"invalidetest@test.fr"};
-
+const defaultUser = JSON.parse(process.env.TEST_DEFAULT_USER);
 
 beforeAll(async () => {
     await pool.query('DELETE FROM users WHERE email = $1 ', [defaultUser.email]);
