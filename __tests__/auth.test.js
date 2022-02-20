@@ -70,7 +70,7 @@ describe('POST /api/inscription', () =>{
         
         await request(app).post('/api/instription')
             .send({})
-            .expect(401)
+            .expect(400)
             .expect('Content-Type', /json/)
             .then((res) =>{
                 expect(res.body.msg).toEqual("Email manquant")
@@ -104,7 +104,7 @@ describe('POST /api/connexion', () =>{
         
         await request(app).post('/api/connexion')
             .send({})
-            .expect(401)
+            .expect(400)
             .expect('Content-Type', /json/)
             .then((res) =>{
                 expect(res.body.msg).toEqual("Email manquant")

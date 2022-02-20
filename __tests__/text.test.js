@@ -85,7 +85,7 @@ describe('POST /api/justify', () =>{
             .expect(402)
             .expect('Content-Type', /json/)
             .then((res) =>{
-                expect(res.body.msg).toEqual("Crédit journalier épuisé")
+                expect(res.body.msg).toEqual("Crédit journalier insuffisant")
             });
     })
 
@@ -96,7 +96,6 @@ describe('POST /api/justify', () =>{
             .expect(200)
             .expect('Content-Type', /json/)
             .then((res) =>{
-                
                 expect(res.body.user).toEqual(JSON.parse(process.env.TEST_DEFAULT_USER).email)
                 expect(res.body.dailyRateUsed).toEqual(process.env.DAILY_RATE_LIMIT)
                 expect(Object.keys(res.body.texts).length).toEqual(1)
