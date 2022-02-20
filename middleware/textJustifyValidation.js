@@ -20,7 +20,7 @@ module.exports = async function(req, res, next){
     const verif = rate+textLength
 
     if(verif >= process.env.DAILY_RATE_LIMIT){
-        return res.status(402).json({ msg: "Crédit journalier épuisé" });
+        return res.status(402).json({ msg: "Crédit journalier insuffisant" });
     }
     req.textLength = textLength;
     next();
