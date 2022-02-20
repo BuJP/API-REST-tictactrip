@@ -6,7 +6,7 @@ const fs = require('fs');
 
 
 
-
+const {deleteUser}  = require('../models/AuthModel');
 require('dotenv').config();
 
 const invalideMailUser = {email:"invalidetest"};
@@ -14,14 +14,14 @@ const invalideUser = {email:"invalidetest@test.fr"};
 const defaultUser = JSON.parse(process.env.TEST_DEFAULT_USER);
 
 beforeAll(async () => {
-    await pool.query('DELETE FROM users WHERE email = $1 ', [defaultUser.email]);
+    await deleteUser(defaultUser.email);
     
-  })
+})
   
-  afterAll(done => {
+afterAll(done => {
     pool.end();
     done()
-  })
+})
 
 
 

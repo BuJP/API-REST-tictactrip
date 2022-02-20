@@ -4,6 +4,7 @@ const router = require("express").Router();
 const jwt = require('../utils/jwt');
 const validateCredential = require('../middleware/Validation');
 const { Router } = require("express");
+const {getUser, registerUser}  = require('../models/AuthModel');
 
 
 router.post("/instription",validateCredential, async(req, res) => {
@@ -12,16 +13,14 @@ router.post("/instription",validateCredential, async(req, res) => {
         const {email} = req.body;
 
         //2. Verifier que l'utilisateur n'existe pas
-        const user = await pool.query('SELECT * FROM users WHERE email = ($1)',[email]);
+        const user = await getUser(email);
 
         if(user.rows.length !== 0 ){
             return res.status(401).send({msg:"L'utilisateur existe déjà"}); //unauthorized
         }
 
         //3. ajouter l'utilisateur
-        const newUser = await pool.query(
-            "INSERT INTO users (email) VALUES ($1) RETURNING *", [email]
-        );
+        const newUser = await registerUser(email)
 
         //4. generer un token jwt
         const token = jwt.generateToken(newUser.rows[0].email);
@@ -42,7 +41,7 @@ router.post("/connexion",validateCredential, async(req,res) => {
         const {email} = req.body;
 
         //2. verifier que l'utilisateur existe
-        const user = await pool.query('SELECT * FROM users WHERE email = ($1)',[email]);
+        const user = await getUser(email);
         if(user.rows.length === 0 ){
             return res.status(401).send({ msg:"Identifient non valide"}); //unauthorized
         }
