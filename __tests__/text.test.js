@@ -2,6 +2,7 @@ const app = require("../app");
 
 const request = require("supertest");
 const pool = require("../models/dbConfig");
+const {deleteAllJustifiedTextFromUser, setDailyRateToMax}  = require('../models/TextModel');
 const fs = require('fs');
 require('dotenv').config();
 
@@ -10,9 +11,9 @@ var token = null;
 
   
 beforeAll(async () => {
-    await pool.query('DELETE FROM justified_text WHERE user_id = $1 ', [JSON.parse(process.env.TEST_DEFAULT_USER).email]);
+    await deleteAllJustifiedTextFromUser(JSON.parse(process.env.TEST_DEFAULT_USER).email);
     
-  })
+})
 afterAll(done => {
     pool.end();
     done();
@@ -84,13 +85,26 @@ describe('POST /api/justify', () =>{
             .expect(402)
             .expect('Content-Type', /json/)
             .then((res) =>{
-                console.log(res.body)
                 expect(res.body.msg).toEqual("Crédit journalier épuisé")
+            });
+    })
+
+    it('Retourne la liste des textes justifié par l utilisateur et un code HTTP 200', async () =>{
+        
+        await request(app).get('/api/justify')
+            .set('Authorization', 'Bearer ' +  token.token  )
+            .expect(200)
+            .expect('Content-Type', /json/)
+            .then((res) =>{
+                
+                expect(res.body.user).toEqual(JSON.parse(process.env.TEST_DEFAULT_USER).email)
+                expect(res.body.dailyRateUsed).toEqual(process.env.DAILY_RATE_LIMIT)
+                expect(Object.keys(res.body.texts).length).toEqual(1)
             });
     })
 
   })
 
 async function setRateToMax(){
-   return await pool.query('UPDATE justified_text SET length= $1 WHERE user_id = $2 RETURNING length' , [ process.env.DAILY_RATE_LIMIT ,JSON.parse(process.env.TEST_DEFAULT_USER).email]);
+   return await setDailyRateToMax(JSON.parse(process.env.TEST_DEFAULT_USER).email, process.env.DAILY_RATE_LIMIT );
 }

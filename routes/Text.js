@@ -4,7 +4,7 @@ const textJustifyValidation = require('../middleware/textJustifyValidation');
 const justify = require('../utils/justifyText');
 require('dotenv').config();
 const router = require("express").Router();
-
+const {getAllJustifiedTextFromUser, addJustifiedText, getDailyRateUsedFromUser}  = require('../models/TextModel');
 
 
 router.post("/justify", [validateJwt,textJustifyValidation], async(req,res) =>{
@@ -16,9 +16,8 @@ router.post("/justify", [validateJwt,textJustifyValidation], async(req,res) =>{
         const justifiedText = justify.justify(text,  process.env.MAX_CHARACTER);
 
         // 3. inserer le texte justifier dans la bdd
-        const newText = await pool.query(
-            "INSERT INTO justified_text(user_id, text, created_at, length) VALUES ( $1, $2, now(), $3);", [req.user.email, justifiedText,req.textLength]
-        );
+        const newText = await addJustifiedText(req.user.email, justifiedText,req.textLength)
+        
         
         // 4. retourner le texte justifier
         res.send(justifiedText);
@@ -29,5 +28,19 @@ router.post("/justify", [validateJwt,textJustifyValidation], async(req,res) =>{
         res.status(500).send("Un problème est survenue sur le serveur");
     }
 })
+
+router.get('/justify', [validateJwt], async(req, res)=>{
+    texts = await getAllJustifiedTextFromUser(req.user.email)
+    dailyRate = await getDailyRateUsedFromUser(req.user.email)
+
+    resp = {
+        user:(req.user.email).trim(),
+        dailyRateUsed : dailyRate.rows[0].sum ? dailyRate.rows[0].sum : 0,
+        texts : texts.rows
+    }
+
+    res.json(resp);
+})
+
 
 module.exports = router;
