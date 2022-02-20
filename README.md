@@ -17,5 +17,9 @@ L'objectif de ce projet est d'implémenter et déployer une API REST qui justifi
 
 ![modelisation_de_la_bdd](https://user-images.githubusercontent.com/86422799/154759725-be2a1959-a899-4b98-b1dc-a7af8cb37bef.JPG)
 
+### Bonus réalisé
+- [x] Tests
+- [x] Coverage
+- [x] [Documentation](documentation/README.md) 
 
- [Voir la documention de l'API](documentation/README.md) 
+[Voir la documention de l'API](documentation/README.md) 
